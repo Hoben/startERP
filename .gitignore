@@ -10,4 +10,5 @@ composer.lock
 Thumbs.db
 vendor/
 views/cache/
+cache/
     
