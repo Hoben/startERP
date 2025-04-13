@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+{% set body_id = 'login-page' %}
+
+{% block title %}
+  Login
+{% endblock %}
+{% block head %}
+  {{ parent() }}
+{% endblock %}
+{% block content %}
+  <div class="login-form">
+    <h1 class="mb-4 text-center">Authentification</h1>
+
+    {% if error %}
+      <div class="alert alert-danger" role="alert">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/login">
+      <div class="mb-3">
+        <label for="username" class="form-label">Nom d'utilisateur</label>
+        <input type="text" class="form-control" id="username" name="username" required autofocus />
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label d-flex justify-content-between">
+          Mot de passe
+          <!-- <a href="#" class="small">Forgot?</a> -->
+        </label>
+        <input type="password" class="form-control" id="password" name="password" required />
+      </div>
+
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="remember" name="remember" />
+        <label class="form-check-label" for="remember">Se souvernir de moi ?</label>
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Valider</button>
+      </div>
+    </form>
+    
+  </div>
+{% endblock %}
+{% block footer %}
+
+{% endblock %}

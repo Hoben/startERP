@@ -1,0 +1,18 @@
+$dsn  = 'mysql:host=localhost;dbname=test;charset=utf8mb4';
+$user = 'root';
+$pass = '';
+
+try {
+    $pdo = new PDO($dsn, $user, $pass);
+    // Optional: set error mode to exceptions
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die('Connection failed: ' . $e->getMessage());
+}
+
+
+$app->get('/500', function (Request $request, Response $response) {
+
+throw new Exception("Oops! Something went wrong.");
+return $response;
+});

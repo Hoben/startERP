@@ -1,0 +1,13 @@
+composer.lock
+.env
+.idea/
+/*.log
+*.cache
+*.bak
+*.swp
+*.tmp
+.DS_Store
+Thumbs.db
+vendor/
+views/cache/
+    
