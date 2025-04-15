@@ -11,6 +11,10 @@ use App\Middleware\LoginRateLimiterMiddleware;
 
 return function (App $app) {
 
+    // Index route
+    $app->get('/',     [DashboardController::class, 'index']);
+
+
     $app->get('/login',     [AuthController::class, 'showLogin']);
     $app->post('/login',    [AuthController::class, 'login'])->add(new LoginRateLimiterMiddleware());
     $app->any('/logout',    [AuthController::class, 'logout'])->add(new AuthMiddleware());
@@ -19,6 +23,6 @@ return function (App $app) {
     $secureRoutes = $app->group('', function () use ($app) {
         $app->get('/dashboard', [DashboardController::class, 'show']);
     });
-    
+
     $secureRoutes->add(new AuthMiddleware());
 };

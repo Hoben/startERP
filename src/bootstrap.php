@@ -5,6 +5,7 @@ namespace App;
 
 use PDO;
 use DI\Container;
+use PDOException;
 use Monolog\Logger;
 use Slim\Views\Twig;
 use Twig\Environment;
@@ -12,9 +13,10 @@ use Psr\Log\LoggerInterface;
 use Slim\Factory\AppFactory;
 use Slim\Views\TwigMiddleware;
 use Twig\Loader\FilesystemLoader;
-use App\Controller\AuthController;
-use App\Controller\DashboardController;
+
 use Monolog\Handler\StreamHandler;
+use App\Controller\DashboardController;
+
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -36,6 +38,8 @@ $container->set('twig', function ($c) {
         'cache' => $config->twigCache,
     ]);
 
+    $twig->addExtension(new \Twig\Extension\DebugExtension());
+
     return $twig;
 });
 
@@ -45,17 +49,25 @@ $container->set(LoggerInterface::class, function () {
     return $logger;
 });
 
-$container->set(PDO::class, function ($c){
+$container->set(PDO::class, function ($c) {
     $config = $c->get('config');
-    return new PDO(
-        'mysql:host=localhost;dbname=test;charset=utf8mb4', // e.g. 'mysql:host=localhost;dbname=mydb'
-        'root',
-        ''
-    );
+    try {
+        $pdo = new PDO(
+            'mysql:host=localhost;dbname=test;charset=utf8mb4', // e.g. 'mysql:host=localhost;dbname=mydb'
+            'root',
+            ''
+        );
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
+    } catch (PDOException $e) {
+        die('Database connection failed: ' . $e->getMessage());
+    }
 });
 
-$container->set(AuthController::class, function ($c) {
-    return new AuthController(
+/* Register Controllers */
+
+$container->set(\App\Controller\AuthController::class, function ($c) {
+    return new \App\Controller\AuthController(
         $c->get('twig'),
         $c->get('config'),
         $c->get(LoggerInterface::class),

@@ -31,4 +31,22 @@ abstract class BaseController
     {
         return !empty($_SESSION['user_id']);
     }
+
+    public function getLoggedUserId(): ?int
+    {
+        return $_SESSION['user_id'] ?? null;
+    }
+
+    public function getLoggedUser(): \App\Model\User
+    {
+        $userRepository = new \App\Repository\UserRepository($this->db);
+        $userId = $this->getLoggedUserId();
+
+        if ($userId === null) {
+            throw new \Exception('User not logged in');
+        }
+        
+        $user = $userRepository->findById($userId);
+        return $user;
+    }
 }

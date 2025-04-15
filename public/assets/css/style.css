@@ -15,3 +15,8 @@ body#login-page .login-form {
     background: white;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
 }
+
+.text
+{
+    color: rgba(255, 255, 255, 0.5);
+}
